@@ -8,7 +8,6 @@ import os
 if not os.path.isdir(folder):
     os.mkdir(folder)
 
-
 def get_data_info():
     iris = load_iris()
     x = iris.data[:,(0,1)]
