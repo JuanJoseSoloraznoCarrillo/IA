@@ -1,6 +1,6 @@
 from perceptron import Perceptron,FOLDER
 #from sklearndata import x_train,y_train,x_test,y_test
-from cldset import x_train,y_train,x_test,y_test
+from irisdata import x_train,y_train,x_test,y_test
 import matplotlib.pyplot as plt
 import numpy as np
 import os
