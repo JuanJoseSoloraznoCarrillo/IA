@@ -48,9 +48,6 @@ class Perceptron:
     @Public_class: This class is an example of the use of simple perceptron.
     @Attr:
         -
-    @Usage:
-    @theroy:
-        learning rate:
     """
     def __init__(self,learning_rate,epochs):
         self.weights = 0

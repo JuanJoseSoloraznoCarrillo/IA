@@ -1,0 +1,29 @@
+{
+      "folders": [
+        {
+          "path": "."
+        }
+      ],
+      "settings": {"python.analysis.extraPaths": [
+                 "D:/p_ta3/users/JuSo/IA",
+                 "D:/p_ta3/users/JuSo/IA",
+                 "D:/p_ta3/users/JuSo/IA",
+                 "D:/p_ta3/users/JuSo/IA",
+                 "D:/p_ta3/users/JuSo/IA",
+                 "D:/p_ta3/users/JuSo/IA",
+                 "D:/p_ta3/users/JuSo/IA",
+                 "D:/p_ta3/users/JuSo/IA/datasets",
+                 "D:/p_ta3/users/JuSo/IA/images",
+                 "D:/p_ta3/users/JuSo/IA/images",
+                 "D:/p_ta3/users/JuSo/IA/images",
+] },
+"launch": {
+            "version": "0.2.0",
+            "configurations": [{
+            "name": "Python: DebugForTA",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal" },
+          ]}
+        }
