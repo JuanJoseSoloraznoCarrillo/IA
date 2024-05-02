@@ -11,14 +11,15 @@ import os
 
 }}}
 """
-folder='images'
+FOLDER='images'
 try:
-    os.mkdir(folder)
+    os.mkdir(FOLDER)
 except:
     pass
 
 def line():
 #{{{
+    plt.clf()
     # x vector
     x = list(range(10))
     p1 = 3.5 # coordinate a of a point.
@@ -38,7 +39,7 @@ def line():
         y.append(val*m)
 
     plt.plot(x,y) #plot the line
-    plt.savefig('{}/line'.format(folder))
+    plt.savefig('{}/line'.format(FOLDER))
 #}}}
 
 class Perceptron:

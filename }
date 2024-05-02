@@ -13,7 +13,6 @@ A simple perceptron only can clasify between two values, then, we will symplify 
 
 # Data preparation using panda.
 df = pd.read_csv('datasets/iris.csv') #read de .csv file.
-df = df.sample(frac=1) # shuffle data information.
 specie_names = df['species'].to_numpy()
 setosa_num = np.array([1 if name=='setosa' else 0 for name in specie_names])
 df = df.drop('species',axis=1) #remove the column four "species name"
@@ -24,10 +23,10 @@ y = setosa_num
 
 #train test split
 train_percent = 0.5 #we'll use the 50% of all data.
-total_data = len(x)
-total_train_number = int(total_data*train_percent) # since x and y must be the same lenght, the total items taken for the training must be the same.
-total_test_number = int(total_data-total_train_number)
+total_train_number = int(len(x)*train_percent) # since x and y must be the same lenght, the total items taken for the training must be the same.
 x_train = x[:total_train_number]
 y_train = y[:total_train_number]
-x_test = x[total_test_number:total_data]
-y_test = y[total_test_number:total_data]
+x_test = x[total_train_number:]
+y_test = y[total_train_number:]
+
+
