@@ -28,10 +28,10 @@ def line():
     px = 1.1# coordinate a of a point.
     py = 3.9# coordinate b of a point.
     plt.plot(px,py,'bo')
-    # the point in the line   
+    # the point in the line
     P1_ = 4# coordinate a of a point.
     P2_ = 4.5 # coordinate a of a point.
-    
+
     m = P2_/P1_ # slope
     #y = m*x line ecuation
     y = []
@@ -50,7 +50,7 @@ class Perceptron:
         -
     @Usage:
     @theroy:
-        learning rate: 
+        learning rate:
     """
     def __init__(self,learning_rate,epochs):
         self.weights = 0
@@ -60,18 +60,21 @@ class Perceptron:
 
     def activation(self,z):
         return np.heaviside(z,0)
-    
+
     def fit(self,x,y):
+        plt.clf()
         n_features = x.shape[1]
         self.weights = np.zeros((n_features))
-        
         for epoch in range(self.epochs):
             for i in range(len(x)):
                 z = np.dot(x,self.weights) + self.bias
                 y_pred = self.activation(z)
                 self.weights = self.weights + self.learning_rate * (y[i] - y_pred[i])*x[i]
                 self.bias = self.bias + self.learning_rate * (y[i] - y_pred[i])
-
+            weight_error = self.weights[0]
+            weight_to_plot = (weight_error*(-1))
+            plt.plot(epoch,weight_to_plot,'bo')
+        plt.savefig('{}/learning_progress'.format(FOLDER))
         return self.weights, self.bias
 
     def predict(self,x):
