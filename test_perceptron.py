@@ -1,6 +1,6 @@
 from perceptron import Perceptron,FOLDER
-#from sklearndata import x_train,y_train,x_test,y_test
-from irisdata import x_train,y_train,x_test,y_test
+from sklearndata import x_train,y_train,x_test,y_test
+#from irisdata import x_train,y_train,x_test,y_test
 import matplotlib.pyplot as plt
 import sys
 import numpy as np
@@ -49,7 +49,7 @@ if __name__ == '__main__':
         epochs = int(sys.argv[1])
     except:
         epochs = 100
-    perceptron = Perceptron(learning_rate=0.001,epochs=epochs)
+    perceptron = Perceptron(learning_rate=learning_rate,epochs=epochs)
     perceptron.fit(x_train,y_train)
     y_pred = perceptron.predict(x_test)
     plot_data('prediction',x_test,y_pred)

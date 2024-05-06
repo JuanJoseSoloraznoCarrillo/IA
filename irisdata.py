@@ -3,11 +3,11 @@ import numpy as np
 
 #{{{
 """
-iris_species_name = ['setosa',versicolor','virginica']
-iris_species_num = [0,1,2] # 0=setosa; 1=versicolor; 2=virginica
-iris_data_charateristics = ['sepal_length','sepal_width','petal_length',petal_width']
-iris_data_values         = [[5.1,....,5.9],[3.5,...,3.0],[1.4,....,5.1],[0.2,...,1.8]]
-A simple perceptron only can clasify between two values, then, we will symplify the iris dataset to two values.
+>>> iris_species_name = ['setosa',versicolor','virginica']
+>>> iris_species_num = [0,1,2] # 0=setosa; 1=versicolor; 2=virginica
+>>> iris_data_charateristics = ['sepal_length','sepal_width','petal_length',petal_width']
+>>> iris_data_values         = [[5.1,....,5.9],[3.5,...,3.0],[1.4,....,5.1],[0.2,...,1.8]]
+>>> A simple perceptron only can clasify between two values, then, we will symplify the iris dataset to two values.
 """
 #}}}
 
