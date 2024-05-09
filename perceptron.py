@@ -1,133 +1,124 @@
-# Author: Solorzano, Juan Jose
-# Date:   
-#
-#
-#
-
+# -*- coding: utf-8 -*-
+#Author: Solorzano, Juan Jose
+#Date: July 18, 2023
+#Python: 3.6>
+#===============================================================================================================#
+#Description: This script demonstrates the head of a Python file with additional metadata.
+# A line is defined by:
+#    y=mx -> where m is the slope (gradient) and the x is the independient variable of the function.
+#    m=(p2/p1)*x
+#    a point P' = (p'1,p'2) is on the line if the following condition is fulfiled:
+#    m*(p'1)-p'2 = 0
+#===============================================================================================================#
 import numpy as np
 import matplotlib.pyplot as plt
 import os
-"""
-{{{
-    a line is defined by:
-        y=mx -> where m is the slope (gradient) and the x is the independient variable of the function.
-        m=(p2/p1)*x
-        a pint P' = (p'1,p'2) is on the line if the following condition is fulfiled:
-        m*(p'1)-p'2 = 0
-}}}
-"""
 FOLDER='images'
-try:
-    os.mkdir(FOLDER)
-except:
-    pass
-
-def line():
-#{{{
-    plt.clf()
-    # x vector
-    x = list(range(10))
-    p1 = 3.5 # coordinate a of a point.
-    p2 = 1.0 # coordinate b of a point.
-    plt.plot(p1,p2,'ro')
-    px = 1.1# coordinate a of a point.
-    py = 3.9# coordinate b of a point.
-    plt.plot(px,py,'bo')
-    # the point in the line
-    P1_ = 4# coordinate a of a point.
-    P2_ = 4.5 # coordinate a of a point.
-
-    m = P2_/P1_ # slope
-    #y = m*x line ecuation
-    y = []
-    for val in x: #fill the y vector with the slop.
-        y.append(val*m)
-
-    plt.plot(x,y) #plot the line
-    plt.savefig('{}/line'.format(FOLDER))
-#}}}
 
 class Perceptron:
-#{{{
     """
     @Public_class: This class is an example of the use of simple perceptron.
     @Attr:
-        -
+              ____+(learning_rate*error)_______Weights_Update__________
+              |                                                       |
+              |   --------------                                      |
+        X1--(W1)--|            |                                      |
+         .        |            |                                      |
+        X2--(W2)--| Sum(Xn*Wn) |--[activation]--->> Output --> (error)[y-y^]
+         .        |            |
+        Xn--(Wn)--|            |
+                  --------------
+                        |
+            (bias)-------
+        @Definition: 
+            >>> Z = W1*X1+W1X2 + ... + WnXn -> X^T*W
     """
-    def __init__(self,learning_rate,epochs):
+    
+    def __init__(self, learning_rate:float, epochs:int, verbose=False):
         self.weights = None
         self.bias = 0
         self.learning_rate = learning_rate
         self.epochs = epochs
+        self.verbose = verbose
 
-    def _step_activation_function(self,z):
+    def _step_activation_function(self, Z:list, threshold=0) -> np.ndarray:
         """
-        @<acces>_method: _description_
-        @Args:
-            - z (_type_): _description_
-        @Returns (_type_): _description_ 
+        Step function activation
+        @Definition:
+            >>> h(z) = {0 if z < Threshold; 1 if >= Threshold}
         """
-        if isinstance(z,np.ndarray):
-            array_values = np.array([1. if i>=0 else 0. for i in z])
-            return array_values
-        else: 
-            if z >= 0:
-                return 1
-            else:
-                return 0
+        return np.array([1 if z>=threshold else 0 for z in Z])
 
-    def fit(self,x,y):
-        """
-        @<acces>_method: _description_
-        @Args:
-            - x (_type_): _description_
-            - y (_type_): _description_
-        @Returns (_type_): _description_ 
-        """
-        n_features = x.shape[1] # num the inputs.
-        self.weights = np.zeros((n_features)) # array_like: [0,0]
-        # for loop for the training
+    def train(self, inputs:np.ndarray, target:np.ndarray) -> None:
+        inputs = np.array(inputs)
+        target = np.array(target)
+        n_features = inputs.shape[1] # num the inputs of the perceptron.
+        self.weights = np.zeros(n_features) # array_like: [0,0]
+        self.bias = 0
+        self.cost_history = [] #to plot the loss function.
+        for epoch in range(self.epochs): # for each epoch defined.
+            errors = []
+            for idx in range(len(inputs)): 
+                y_pred = self.predict(inputs)
+                error = target[idx] - y_pred[idx]
+                errors.append(error)
+                #Gradient descent
+                weight_gradient = -error * inputs[idx]
+                bias_gradient = -error
+                self.weights -= (self.learning_rate * weight_gradient)
+                self.bias -= self.learning_rate * bias_gradient
+            np_errors = np.array(errors)
+            cost = (np_errors ** 2).sum() / (2 * len(inputs))
+            self.cost_history.append(cost)
+            self.get_line_bundary()
+            if self.verbose:
+                print(f"Epoch {epoch + 1}: Weights = {self.weights}")
+        #plot results
+        plt.savefig('{}/line'.format(FOLDER))
+        self.plot_loss()
+
+    def predict(self, data:np.ndarray) -> np.ndarray:
+        Z = np.dot(data, self.weights) + self.bias
+        return self._step_activation_function(Z)
+
+    def get_line_bundary(self):
+        # (w · x) + b -> w:weights; x:inputs; b:bias
+        # (w1*x1 + w2*x2) + b -> if x2=y
+        # w1*x + w2*y + b -> ax+by+c=0
+        #
+        # x = -(w2*y/w1) - (b/w1) -> if y=0 => x=-b/w1 | x1 = -b/w1
+        # y = -(w1*x/w2) - (b/w2) -> if x=0 => y=-b/w2 | x2 = -b/w2
+        #
+        # x=-b/w1 -> p1=(-b/w1,0) -> p1=x -> (-b/w1)m
+        # y=-b/w2 -> p2=(0,-b/w2) -> p2=c -> c
+        #
+        # m = (0-(-b/w2))/(-b/w1 - 0) -> m=(b/w2)/(-b/w1)
+        # y = ax+c | m=(b/w2)/(-b/w1) | c = -b/w2 
+        # y = ((b/w2)/(-b/w1))x + (-b/w2)
+        m=((self.bias/-self.weights[1])/(self.bias/self.weights[0]))
+        c=-self.bias/self.weights[1]
+        x=range(4,8)
+        y=m*x+c
+        plt.plot(x, y, label='y = {}x + {}'.format(m, c),linestyle='--')
+
+    def plot_loss(self) -> None:
+        if not os.path.isdir(FOLDER):
+            os.mkdir(FOLDER)
         plt.clf()
-        for epoch in range(self.epochs): #for each epoch defined.
-            for i in range(len(x)):
-                z = np.dot(x,self.weights) + self.bias #dot product plus bias value (row*column)
-                y_pred = self._step_activation_function(z) # gets a predict value for each value in the array. 
-                # weigth values actualization.
-                self.weights = self.weights + self.learning_rate * (y[i] - y_pred[i])*x[i]
-                # bias value actulization.
-                error = y[i]-y_pred[i] #error calculation for each value.
-                self.bias = self.bias + self.learning_rate * error
-            # plot the progress through each epoch.
-            current_weight = self.weights[0]
-            weight_to_plot = (current_weight*(-1))# change the position of the values in the graph.
-            plt.plot(epoch,weight_to_plot,'bo') #plotting the points.
-        plt.savefig('{}/learning_progress'.format(FOLDER)) # saving the image.
-        return self.weights, self.bias # returns the final weights and bias calculated.
+        plt.plot(range(1, self.epochs + 1), self.cost_history)
+        plt.xlabel('Epoch')
+        plt.ylabel('Cost')
+        plt.title('Cost over Epochs')
+        plt.grid(True)
+        plt.savefig('{}/tst_cost_fnc'.format(FOLDER))
+        plt.show()
 
-    def predict(self,x):
-        z = np.dot(x,self.weights) + self.bias # 
-        return self._step_activation_function(z)
-#}}}
-
-def dot_product(_A_,_B_):
-    """
-    @<acces>_method: _description_
-    @Args:
-        - _A_ (_type_): _description_
-        - _B_ (_type_): _description_
-    @Returns (_type_):
-    Examples
-    --------
-    The dot product of two vectors in R_n is defined by:
-        X*Y = x1y1 + x2y2 + ... + xnyn
-    >>> X=[[2,7],[5,8]]
-    >>> Y=[[1,5],[4,6]]
-    >>> X1(2)*Y1(1) = 
-    >>> X2(7)*Y2(5) = 35
-    >>> X3(5)*Y3(4) = 20
-    >>> X4(8)*Y4(6) = 48
-    >>> ----------- + --
-    >>>               103
-    """
-    _B_array = np.array(_B_)
-    _A_array = np.array(_A_)
+    @staticmethod
+    def accuracy(y_true:list, y_pred:list) -> float:
+        """Calculate accuracy"""
+        correct = 0
+        total = len(y_true)
+        for true, pred in zip(y_true, y_pred):
+            if true == pred:
+                correct += 1
+        return (correct / total) * 100
