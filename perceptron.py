@@ -74,7 +74,6 @@ class Perceptron:
             if self.verbose:
                 print(f"Epoch {epoch + 1}: Weights = {self.weights}")
         #plot results
-        plt.savefig('{}/line'.format(FOLDER))
         self.plot_loss()
 
     def predict(self, data:np.ndarray) -> np.ndarray:
@@ -111,7 +110,7 @@ class Perceptron:
         plt.title('Cost over Epochs')
         plt.grid(True)
         plt.savefig('{}/tst_cost_fnc'.format(FOLDER))
-        plt.show()
+        #plt.show()
 
     @staticmethod
     def accuracy(y_true:list, y_pred:list) -> float:
