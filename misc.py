@@ -5,21 +5,29 @@
 #Description: 
 #===============================================================================================================#
 
-from perceptron import FOLDER,Perceptron
+#from perceptron import FOLDER
+FOLDER='images'
 import matplotlib.pyplot as plt
 import argparse
 import numpy as np
 
-
 def plot_data(fig_name:str,x_train=None,y_train=None,x_test=None) -> None:
     if isinstance(x_test,np.ndarray):
         plt.clf()
+        plt.figure(figsize=(15, 10))
+        plt.xlabel('Sepal Lenght',fontdict={'fontsize':'large'})
+        plt.ylabel('Sepal Width',fontdict={'fontsize':'large'})
+        plt.title('Iris Setosa',fontdict={'fontsize':'xx-large'})
         plt.grid(True)
         for axis in x_test:
             plt.plot(axis[0],axis[1],'ro')
         plt.savefig('{}/{}'.format(FOLDER,fig_name))
     if isinstance(x_train,np.ndarray) and isinstance(y_train,np.ndarray):
         plt.clf()
+        plt.figure(figsize=(15, 10))
+        plt.xlabel('Sepal Lenght',fontdict={'fontsize':'large'})
+        plt.ylabel('Sepal Width',fontdict={'fontsize':'large'})
+        plt.title('Iris Setosa',fontdict={'fontsize':'xx-large'})
         plt.grid(True)
         for axis,group in zip(x_train,y_train):
             if group:
